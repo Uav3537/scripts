@@ -34,7 +34,7 @@ nameBox.Parent = frame
 
 -- 인자 입력
 local argsBox = Instance.new("TextBox")
-argsBox.PlaceholderText = "인자 입력 (쉼표로 구분, 숫자/문자 가능)"
+argsBox.PlaceholderText = '인자 입력 (쉼표로 구분, 예: true, Workspace.Players.PlayerName, "Punch")'
 argsBox.Size = UDim2.new(0, 330, 0, 40)
 argsBox.Position = UDim2.new(0, 10, 0, 90)
 argsBox.BackgroundColor3 = Color3.fromRGB(70,70,70)
@@ -71,21 +71,23 @@ fireButton.MouseButton1Click:Connect(function()
         return
     end
 
-    -- 인자 처리
+    -- 인자 처리 (loadstring로 실제 Lua 값으로 평가)
     local args = {}
     if argsInput ~= "" then
         for str in string.gmatch(argsInput, '([^,]+)') do
             str = str:match("^%s*(.-)%s*$") -- 앞뒤 공백 제거
-            local num = tonumber(str)
-            if num then
-                table.insert(args, num)
-            elseif str:lower() == "true" then
-                table.insert(args, true)
-            elseif str:lower() == "false" then
-                table.insert(args, false)
+
+            local value
+            local success, result = pcall(function()
+                return loadstring("return " .. str)()
+            end)
+            if success then
+                value = result
             else
-                table.insert(args, str) -- 문자열 그대로
+                value = str -- 실패하면 그냥 문자열
             end
+
+            table.insert(args, value)
         end
     end
 
