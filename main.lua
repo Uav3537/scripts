@@ -61,4 +61,5 @@ end
 
 createButton("infinite yield", function() loadstring(game:HttpGet("https://obj.wearedevs.net/2/scripts/Infinite%20Yield.lua"))() end)
 createButton("dex explorer", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))() end)
-createButton("hitbox", function() loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Uav3537/scripts/refs/heads/main/remotespy.lua"))() end)
+createButton("remote spy", function() loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Uav3537/scripts/refs/heads/main/remotespy.lua"))() end)
+createButton("remote fire", function() loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Uav3537/scripts/refs/heads/main/fireremote.lua"))() end)
