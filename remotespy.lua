@@ -138,6 +138,21 @@ G2L["b"]["BorderColor3"] = Color3.fromRGB(139, 139, 139);
 G2L["b"]["Text"] = [[Run Code]];
 G2L["b"]["Position"] = UDim2.new(0.7033, 0, 0.08491, 0);
 
+-- 기존 Run Code 버튼
+G2L["b"].MouseButton1Click:Connect(function()
+    if _G.Code and _G.Code ~= "" then
+        local func, err = loadstring(_G.Code)
+        if func then
+            pcall(func)
+        else
+            warn("코드 실행 실패:", err)
+        end
+    else
+        warn("실행할 코드가 없습니다")
+    end
+end)
+
+
 -- StarterGui.sexy spy from tf2.Frame.Buttons.Run.Border
 G2L["c"] = Instance.new("TextLabel", G2L["b"]);
 G2L["c"]["BorderSizePixel"] = 0;
