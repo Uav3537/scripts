@@ -7,8 +7,8 @@ screenGui.Parent = playerGui
 screenGui.Name = "FireRemoteGUI"
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 300, 0, 150)
-frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+frame.Size = UDim2.new(0, 350, 0, 220)
+frame.Position = UDim2.new(0.5, -175, 0.5, -110)
 frame.BackgroundColor3 = Color3.fromRGB(50,50,50)
 frame.Parent = screenGui
 
@@ -23,24 +23,37 @@ closeButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
-local textBox = Instance.new("TextBox")
-textBox.PlaceholderText = "Remote 이름 입력"
-textBox.Size = UDim2.new(0, 280, 0, 40)
-textBox.Position = UDim2.new(0, 10, 0, 40)
-textBox.BackgroundColor3 = Color3.fromRGB(70,70,70)
-textBox.TextColor3 = Color3.fromRGB(255,255,255)
-textBox.Parent = frame
+-- Remote 이름 입력
+local nameBox = Instance.new("TextBox")
+nameBox.PlaceholderText = "RemoteEvent 이름 입력"
+nameBox.Size = UDim2.new(0, 330, 0, 40)
+nameBox.Position = UDim2.new(0, 10, 0, 40)
+nameBox.BackgroundColor3 = Color3.fromRGB(70,70,70)
+nameBox.TextColor3 = Color3.fromRGB(255,255,255)
+nameBox.Parent = frame
 
+-- 인자 입력
+local argsBox = Instance.new("TextBox")
+argsBox.PlaceholderText = "인자 입력 (쉼표로 구분, 숫자/문자 가능)"
+argsBox.Size = UDim2.new(0, 330, 0, 40)
+argsBox.Position = UDim2.new(0, 10, 0, 90)
+argsBox.BackgroundColor3 = Color3.fromRGB(70,70,70)
+argsBox.TextColor3 = Color3.fromRGB(255,255,255)
+argsBox.Parent = frame
+
+-- 실행 버튼
 local fireButton = Instance.new("TextButton")
 fireButton.Text = "실행"
 fireButton.Size = UDim2.new(0, 100, 0, 30)
-fireButton.Position = UDim2.new(0.5, -50, 0, 90)
+fireButton.Position = UDim2.new(0.5, -50, 0, 150)
 fireButton.BackgroundColor3 = Color3.fromRGB(100,100,100)
 fireButton.TextColor3 = Color3.fromRGB(255,255,255)
 fireButton.Parent = frame
 
+-- FireServer 실행
 fireButton.MouseButton1Click:Connect(function()
-    local nameInput = textBox.Text
+    local nameInput = nameBox.Text
+    local argsInput = argsBox.Text
     if nameInput == "" then return end
 
     -- ReplicatedStorage에서 RemoteEvent 검색
@@ -53,10 +66,30 @@ fireButton.MouseButton1Click:Connect(function()
         end
     end
 
-    if found then
-        found:FireServer()
-        print("Fired RemoteEvent:", found:GetFullName())
-    else
+    if not found then
         warn("RemoteEvent 찾을 수 없음")
+        return
     end
+
+    -- 인자 처리
+    local args = {}
+    if argsInput ~= "" then
+        for str in string.gmatch(argsInput, '([^,]+)') do
+            str = str:match("^%s*(.-)%s*$") -- 앞뒤 공백 제거
+            local num = tonumber(str)
+            if num then
+                table.insert(args, num)
+            elseif str:lower() == "true" then
+                table.insert(args, true)
+            elseif str:lower() == "false" then
+                table.insert(args, false)
+            else
+                table.insert(args, str) -- 문자열 그대로
+            end
+        end
+    end
+
+    -- RemoteEvent FireServer 호출
+    found:FireServer(unpack(args))
+    print("Fired RemoteEvent:", found:GetFullName(), "with args:", unpack(args))
 end)
