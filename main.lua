@@ -61,44 +61,4 @@ end
 
 createButton("infinite yield", function() loadstring(game:HttpGet("https://obj.wearedevs.net/2/scripts/Infinite%20Yield.lua"))() end)
 createButton("dex explorer", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))() end)
-createButton("hitbox", function()
-    -- 입력창 Frame 생성
-    local inputFrame = Instance.new("Frame")
-    inputFrame.Size = UDim2.new(0, 250, 0, 120)
-    inputFrame.Position = UDim2.new(0.5, -125, 0.5, -60)
-    inputFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    inputFrame.Parent = playerGui
-    inputFrame.Active = true
-    inputFrame.Draggable = true
-
-    -- TextBox 생성
-    local textBox = Instance.new("TextBox")
-    textBox.Size = UDim2.new(0, 230, 0, 40)
-    textBox.Position = UDim2.new(0, 10, 0, 10)
-    textBox.PlaceholderText = "RemoteEvent 이름 입력"
-    textBox.ClearTextOnFocus = false
-    textBox.Parent = inputFrame
-
-    -- Fire 버튼 생성
-    local fireBtn = Instance.new("TextButton")
-    fireBtn.Size = UDim2.new(0, 100, 0, 30)
-    fireBtn.Position = UDim2.new(0.5, -50, 0, 60)
-    fireBtn.Text = "Fire!"
-    fireBtn.Parent = inputFrame
-
-    -- 클릭 이벤트https://github.com/Uav3537/scripts/new/main
-    fireBtn.MouseButton1Click:Connect(function()
-        local eventName = textBox.Text
-        if eventName and eventName ~= "" then
-            local remoteEvent = game:GetService("ReplicatedStorage"):FindFirstChild(eventName)
-            if remoteEvent and remoteEvent:IsA("RemoteEvent") then
-                remoteEvent:FireServer() -- 필요하면 인자 추가
-                print(eventName .. " fired!")
-            else
-                warn("RemoteEvent가 존재하지 않거나 RemoteEvent가 아님")
-            end
-        end
-        inputFrame:Destroy() -- 발사 후 창 닫기
-    end)
-end)
-
+createButton("hitbox", function() loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Uav3537/scripts/refs/heads/main/remotespy.lua"))() end)
