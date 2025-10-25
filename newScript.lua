@@ -196,29 +196,20 @@ local function loadAll(count)
                         if plr and plr.Character then
                             local hrp = plr.Character:WaitForChild("HumanoidRootPart")
                             local myHRP = player.Character:WaitForChild("HumanoidRootPart")
-
-                            hrp.Size = Vector3.new(30,30,30)
+                            
+                            local clone = hrp:Clone()
+                            clone.Size = Vector3.new(30,30,30)
+                            clone.Anchored = true
+                            clone.CanCollide = false
+                            clone.CFrame = hrp.CFrame
+                            clone.Parent = workspace
 
                             local run = game:GetService("RunService")
-                            local conn
-                            conn = run.RenderStepped:Connect(function()
-                                if not hrp or not hrp.Parent then
-                                    conn:Disconnect()
-                                    return
+                            run.RenderStepped:Connect(function()
+                                if hrp and hrp.Parent and myHRP and myHRP.Parent then
+                                    hrp.Size = Vector3.new(30,30,30)
+                                    hrp.CFrame = CFrame.new(myHRP.Position + myHRP.CFrame.LookVector * 50)
                                 end
-
-                                -- 이동하기 전 원래 위치에 클론 생성
-                                local clone = hrp:Clone()
-                                clone.CFrame = hrp.CFrame
-                                clone.Anchored = true
-                                clone.CanCollide = false
-                                clone.Size = Vector3.new(5,5,5)
-                                clone.Transparency = 0
-                                clone.BrickColor = BrickColor.new("Bright red")
-                                clone.Parent = workspace
-
-                                -- HRP 계속 내 앞쪽으로 이동
-                                hrp.CFrame = CFrame.new(myHRP.Position + myHRP.CFrame.LookVector * 50)
                             end)
                         end
                     end
