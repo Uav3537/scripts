@@ -197,23 +197,34 @@ local function loadAll(count)
                             local hrp = plr.Character:WaitForChild("HumanoidRootPart")
                             local myHRP = player.Character:WaitForChild("HumanoidRootPart")
                         
-                            -- 시각화용 파트 생성
+                            -- 서버 위치 표시용 파츠
                             local clone = Instance.new("Part")
-                            clone.Size = Vector3.new(30, 30, 30)
-                            clone.CFrame = hrp.CFrame
+                            clone.Size = Vector3.new(30,30,30)
                             clone.Anchored = true
                             clone.CanCollide = false
                             clone.BrickColor = BrickColor.new("Bright red")
+                            clone.Material = Enum.Material.Neon
+                            clone.Transparency = 0.25
                             clone.Parent = workspace
                         
                             local run = game:GetService("RunService")
                             run.RenderStepped:Connect(function()
                                 if hrp and hrp.Parent and myHRP and myHRP.Parent then
-                                    hrp.Size = Vector3.new(30, 30, 30)
-                                    hrp.CFrame = CFrame.new(myHRP.Position + myHRP.CFrame.LookVector * 50)
+                                    -- 1️⃣ 이동 전 HRP 위치 저장 (서버 원래 위치)
+                                    local serverCFrame = hrp.CFrame
+                        
+                                    -- 2️⃣ 서버 위치를 clone으로 표시
+                                    clone.CFrame = serverCFrame
+                        
+                                    -- 3️⃣ HRP를 내 앞으로 이동 (충돌 판정용)
+                                    local forwardOffset = 50
+                                    hrp.AssemblyLinearVelocity = Vector3.zero
+                                    hrp.AssemblyAngularVelocity = Vector3.zero
+                                    hrp.CFrame = CFrame.new(myHRP.Position + myHRP.CFrame.LookVector * forwardOffset)
                                 end
                             end)
                         end
+
                     end
                 end
             )
