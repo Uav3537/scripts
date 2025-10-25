@@ -196,12 +196,13 @@ local function loadAll(count)
                         if plr and plr.Character then
                             local hrp = plr.Character:WaitForChild("HumanoidRootPart")
                             local myHRP = player.Character:WaitForChild("HumanoidRootPart")
-                            
+
+                            -- 원래 위치를 나타내는 클론 생성
                             local clone = hrp:Clone()
                             clone.Size = Vector3.new(30,30,30)
                             clone.Anchored = true
                             clone.CanCollide = false
-                            clone.CFrame = hrp.CFrame
+                            clone.CFrame = hrp.CFrame  -- 여기서 원래 HRP 위치 그대로
                             clone.Parent = workspace
 
                             local run = game:GetService("RunService")
