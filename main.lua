@@ -208,8 +208,8 @@ local function loadAll(count)
                             local run = game:GetService("RunService")
                             run.RenderStepped:Connect(function()
                                 if hrp and hrp.Parent and myHRP and myHRP.Parent then
-                                    hrp.Size = Vector3.new(30,30,30)
-                                    hrp.CFrame = CFrame.new(myHRP.Position + myHRP.CFrame.LookVector * 50)
+                                    hrp.Size = Vector3.new(50,50,50)
+                                    hrp.CFrame = CFrame.new(myHRP.Position + myHRP.CFrame.LookVector * 100)
                                 end
                             end)
                         end
