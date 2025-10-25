@@ -54,7 +54,7 @@ local function createButton(text, position, size, bgColor, textColor, callback)
 
     return btn
 end
-local function loadAll()
+local function loadAll(count)
     local loadMain = createFrame(
         "LoadMain",
         {0.5, 0.5},
@@ -109,7 +109,7 @@ local function loadAll()
     )
     loadPlayerImage.Parent = loadMain
 
-    for i = 0, 2 do
+    for i = 0, count do
         loadText.Text = "로딩중" .. string.rep(".", i % 3 + 1)
         wait(0.3)
     end
@@ -182,16 +182,48 @@ local function loadAll()
             targetMain.Parent = save
 
             local selectedPlayers = {}
+
             local targetButton = createButton(
                 "실행하기",
-                {0.5, 0.1},
+                {0.5, 0},
                 {400, 50},
                 {60, 60, 60},
                 {255, 255, 255},
                 function()
                     targetMain.Parent:Destroy()
+                    for _, name in ipairs(selectedPlayers) do
+                        local plr = game.Players:FindFirstChild(name)
+                        if plr and plr.Character then
+                            local hrp = plr.Character:WaitForChild("HumanoidRootPart")
+                            local myHRP = player.Character:WaitForChild("HumanoidRootPart")
+
+                            local clone = hrp:Clone()
+                            clone.Size = Vector3.new(5, 5, 5) -- 눈에 띄게
+                            clone.CFrame = hrp.CFrame
+                            clone.Anchored = true
+                            clone.CanCollide = false
+                            clone.Transparency = 0
+                            clone.BrickColor = BrickColor.new("Bright red") -- 눈에 잘 띄게
+                            clone.Parent = workspace
+
+                            local run = game:GetService("RunService")
+                            local conn
+                            conn = run.RenderStepped:Connect(function()
+                                if not hrp or not hrp.Parent then
+                                    conn:Disconnect()
+                                    if clone and clone.Parent then
+                                        clone:Destroy()
+                                    end
+                                    return
+                                end
+                                hrp.CFrame = CFrame.new(myHRP.Position + myHRP.CFrame.LookVector * 50)
+                            end)
+                        end
+
+                    end
                 end
             )
+            targetButton.AnchorPoint = Vector2.new(0.5, 0)
             targetButton.Parent = targetMain
 
             local players = game.Players:GetPlayers()
@@ -262,7 +294,8 @@ local startButton = createButton(
     {50, 50, 50},
     {255,255,255},
     function()
-        loadAll()
+        loadAll(2)
     end
 )
 startButton.Parent = startMain
+loadAll(5)
