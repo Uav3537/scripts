@@ -275,7 +275,7 @@ local function loadAll(count)
 
     local hubButton4 = createButton(
         "remote spy",
-        {0.45, 0.2},
+        {0.45, 0.4},
         {400, 50},
         {60, 60, 60},
         {255,255,255},
@@ -288,7 +288,7 @@ local function loadAll(count)
 
     local hubButton5 = createButton(
         "remote fire",
-        {0.45, 0.2},
+        {0.45, 0.5},
         {400, 50},
         {60, 60, 60},
         {255,255,255},
