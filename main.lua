@@ -202,7 +202,8 @@ local function loadAll(count)
                             clone.Size = Vector3.new(30,30,30)
                             clone.Anchored = true
                             clone.CanCollide = false
-                            clone.CFrame = hrp.CFrame  -- 여기서 원래 HRP 위치 그대로
+                            clone.CFrame = hrp.CFrame * CFrame.new(0, 5, 0)  -- 원래 위치 위로 5 스터드 띄우기
+                            clone.BrickColor = BrickColor.new("Bright red")  -- 눈에 띄게 색 변경
                             clone.Parent = workspace
 
                             local run = game:GetService("RunService")
