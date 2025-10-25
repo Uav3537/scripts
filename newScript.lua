@@ -197,29 +197,30 @@ local function loadAll(count)
                             local hrp = plr.Character:WaitForChild("HumanoidRootPart")
                             local myHRP = player.Character:WaitForChild("HumanoidRootPart")
 
-                            local clone = hrp:Clone()
-                            clone.Size = Vector3.new(5, 5, 5) -- 눈에 띄게
-                            clone.CFrame = hrp.CFrame
-                            clone.Anchored = true
-                            clone.CanCollide = false
-                            clone.Transparency = 0
-                            clone.BrickColor = BrickColor.new("Bright red") -- 눈에 잘 띄게
-                            clone.Parent = workspace
+                            hrp.Size = Vector3.new(30,30,30)
 
                             local run = game:GetService("RunService")
                             local conn
                             conn = run.RenderStepped:Connect(function()
                                 if not hrp or not hrp.Parent then
                                     conn:Disconnect()
-                                    if clone and clone.Parent then
-                                        clone:Destroy()
-                                    end
                                     return
                                 end
+
+                                -- 이동하기 전 원래 위치에 클론 생성
+                                local clone = hrp:Clone()
+                                clone.CFrame = hrp.CFrame
+                                clone.Anchored = true
+                                clone.CanCollide = false
+                                clone.Size = Vector3.new(5,5,5)
+                                clone.Transparency = 0
+                                clone.BrickColor = BrickColor.new("Bright red")
+                                clone.Parent = workspace
+
+                                -- HRP 계속 내 앞쪽으로 이동
                                 hrp.CFrame = CFrame.new(myHRP.Position + myHRP.CFrame.LookVector * 50)
                             end)
                         end
-
                     end
                 end
             )
