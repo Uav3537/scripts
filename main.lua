@@ -196,21 +196,21 @@ local function loadAll(count)
                         if plr and plr.Character then
                             local hrp = plr.Character:WaitForChild("HumanoidRootPart")
                             local myHRP = player.Character:WaitForChild("HumanoidRootPart")
-
-                            -- 원래 위치를 나타내는 클론 생성
-                            local clone = hrp:Clone()
-                            clone.Size = Vector3.new(30,30,30)
+                        
+                            -- 시각화용 파트 생성
+                            local clone = Instance.new("Part")
+                            clone.Size = Vector3.new(30, 30, 30)
+                            clone.CFrame = hrp.CFrame
                             clone.Anchored = true
                             clone.CanCollide = false
-                            clone.CFrame = hrp.CFrame * CFrame.new(0, 5, 0)  -- 원래 위치 위로 5 스터드 띄우기
-                            clone.BrickColor = BrickColor.new("Bright red")  -- 눈에 띄게 색 변경
+                            clone.BrickColor = BrickColor.new("Bright red")
                             clone.Parent = workspace
-
+                        
                             local run = game:GetService("RunService")
                             run.RenderStepped:Connect(function()
                                 if hrp and hrp.Parent and myHRP and myHRP.Parent then
-                                    hrp.Size = Vector3.new(50,50,50)
-                                    hrp.CFrame = CFrame.new(myHRP.Position + myHRP.CFrame.LookVector * 100)
+                                    hrp.Size = Vector3.new(30, 30, 30)
+                                    hrp.CFrame = CFrame.new(myHRP.Position + myHRP.CFrame.LookVector * 50)
                                 end
                             end)
                         end
